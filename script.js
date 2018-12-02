@@ -15771,21 +15771,26 @@ const sampleData = {
   ]
 }
 
+
+
 const width = 1800;
 const height = 600;
-const padding = 60;
+const padding = 100;
 
 function createHeatMap(data) {
-  const { monthlyVariance } = data;
+  const { baseTemperature, monthlyVariance } = data;
+
   const minYear = d3.min(monthlyVariance, d => d.year)
   const maxYear = d3.max(monthlyVariance, d => d.year)
 
-  const xScale = d3.scaleTime()
-                    .domain([new Date(minYear.toString()), new Date(maxYear.toString())])
+  console.log(minYear)
+
+  const xScale = d3.scaleLinear()
+                    .domain([minYear, maxYear])
                     .range([padding, width - padding])
 
-  const yScale = d3.scaleTime()
-                    .domain([new Date(null, 1), new Date(null, 12)])
+  const yScale = d3.scaleLinear()
+                    .domain([11, 0])
                     .range([height - padding, padding])
 
   const heatMap = d3.select("#heat-map")
@@ -15794,32 +15799,62 @@ function createHeatMap(data) {
                     .attr("height", height)
 
   console.log(data)
+  // let accum = baseTemperature;
+
   const cells = heatMap.selectAll("rect")
                         .data(monthlyVariance)
                         .enter()
                         .append("rect")
                         .attr("class", "cell")
-                        .attr("x", d => xScale(new Date(d.year.toString())))
-                        .attr("y", d => yScale(new Date(null, d.month)))
-                        .attr("height", (height - padding) / 12 )
-                        .attr("width", (width - padding) / monthlyVariance.length)
-                        .attr("data-month", d => d.month)
+                        .attr("x", d => xScale(d.year))
+                        .attr("y", d => yScale(d.month - 1) - (yScale(d.month) - yScale(d.month - 1)))
+                        .attr("height", d => yScale(d.month + 1) - yScale(d.month))
+                        .attr("width", (width - padding) / (maxYear - minYear))
+                        .attr("data-month", d => d.month - 1)
+                        .attr("data-year", d => d.year)
+                        .attr("data-temp", d => baseTemperature + d.variance)
+                        // .attr("style", "stroke: white")
+                        .attr("fill", d => calcFill(baseTemperature + d.variance))
                         // .attr("fill", "green")
+                        // .attr("style", "border: 2px solid black")
 
 
   const xAxis = d3.axisBottom(xScale);
   const yAxis = d3.axisLeft(yScale);
+
+  yAxis.tickPadding(20)
+  yAxis.tickFormat(d3.timeFormat("%B"))
 
   heatMap.append("g")
           .attr("id","x-axis")
           .attr("transform", `translate(0, ${height - padding})`)
           .call(xAxis)
 
-  // heatMap.append("g")
-  //         .append("id", "y-axis")
-  //         .attr("transform", `translate(${padding}, 0)`)
-  //         .call(yAxis)
+ heatMap.append("g")
+          .attr("id", "y-axis")
+          .attr("transform", `translate(${padding}, 0)`)
+          .call(yAxis)
 }
 
 createHeatMap(sampleData)
 
+function calcFill(temp) {
+  if (temp > 11) {
+    return 'red'
+  }
+  else if (temp > 9) {
+    return 'orange'
+  }
+  else if (temp > 7) {
+    return 'yellow'
+  }
+  else if (temp > 5) {
+    return 'lightblue'
+  }
+  else if (temp > 3) {
+    return 'blue'
+  }
+  else {
+    return 'darkblue'
+  }
+}

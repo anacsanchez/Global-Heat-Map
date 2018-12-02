@@ -1,3 +1,12 @@
-.cell {
+/* .cell {
   border: 1px solid black;
+  fill: blue;
+} */
+body {
+  padding: 0;
+  margin: 0;
 }
+
+/* .tick {
+   text-align: center;
+ } */
