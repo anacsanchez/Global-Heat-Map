@@ -15805,7 +15805,7 @@ function createHeatMap(data) {
                         .attr("class", "cell")
                         .attr("x", d => xScale(d.year))
                         .attr("y", d => yScale(createDateFromM(d.month - 1)) - (yScale(createDateFromM(d.month)) - yScale(createDateFromM(d.month - 1))))
-                        .attr("height", d => yScale(createDateFromM(d.month)) - yScale(createDateFromM(d.month - 1)))
+                        .attr("height", d => yScale(createDateFromM(4)) - yScale(createDateFromM(3)))
                         .attr("width", (width - padding) / (maxYear - minYear))
                         .attr("data-month", d => d.month - 1)
                         .attr("data-year", d => d.year)
@@ -15831,7 +15831,7 @@ function createHeatMap(data) {
 }
 
 function createDateFromM(month) {
-  return new Date(2000, month, 1)
+  return new Date(null, month, 1)
 }
 
 createHeatMap(sampleData)
