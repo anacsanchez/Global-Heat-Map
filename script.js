@@ -15790,7 +15790,7 @@ function createHeatMap(data) {
                     .range([padding, width - padding])
 
   const yScale = d3.scaleTime()
-                    .domain([new Date(null, 11), new Date(null, 0)])
+                    .domain([createDateFromM(11), createDateFromM(0)])
                     .range([height - padding, padding])
 
   const heatMap = d3.select("#heat-map")
@@ -15798,31 +15798,25 @@ function createHeatMap(data) {
                     .attr("width", width)
                     .attr("height", height)
 
-  console.log(data)
-  // let accum = baseTemperature;
-
   const cells = heatMap.selectAll("rect")
                         .data(monthlyVariance)
                         .enter()
                         .append("rect")
                         .attr("class", "cell")
                         .attr("x", d => xScale(d.year))
-                        .attr("y", d => yScale(new Date(null, d.month - 1)) - (yScale(new Date(null, d.month)) - yScale(new Date(null, d.month - 1))))
-                        .attr("height", d => yScale(new Date(null,d.month)) - yScale(new Date(null, d.month - 1)))
+                        .attr("y", d => yScale(createDateFromM(d.month - 1)) - (yScale(createDateFromM(d.month)) - yScale(createDateFromM(d.month - 1))))
+                        .attr("height", d => yScale(createDateFromM(d.month)) - yScale(createDateFromM(d.month - 1)))
                         .attr("width", (width - padding) / (maxYear - minYear))
                         .attr("data-month", d => d.month - 1)
                         .attr("data-year", d => d.year)
                         .attr("data-temp", d => baseTemperature + d.variance)
-                        // .attr("style", "stroke: white")
                         .attr("fill", d => calcFill(baseTemperature + d.variance))
-                        // .attr("fill", "green")
-                        // .attr("style", "border: 2px solid black")
 
 
   const xAxis = d3.axisBottom(xScale);
   const yAxis = d3.axisLeft(yScale);
 
-  yAxis.tickPadding(20)
+  yAxis.tickPadding(10)
   yAxis.tickFormat(d3.timeFormat("%B"))
 
   heatMap.append("g")
@@ -15834,6 +15828,10 @@ function createHeatMap(data) {
           .attr("id", "y-axis")
           .attr("transform", `translate(${padding}, 0)`)
           .call(yAxis)
+}
+
+function createDateFromM(month) {
+  return new Date(2000, month, 1)
 }
 
 createHeatMap(sampleData)
