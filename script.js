@@ -15789,8 +15789,8 @@ function createHeatMap(data) {
                     .domain([minYear, maxYear])
                     .range([padding, width - padding])
 
-  const yScale = d3.scaleLinear()
-                    .domain([11, 0])
+  const yScale = d3.scaleTime()
+                    .domain([new Date(null, 11), new Date(null, 0)])
                     .range([height - padding, padding])
 
   const heatMap = d3.select("#heat-map")
@@ -15807,8 +15807,8 @@ function createHeatMap(data) {
                         .append("rect")
                         .attr("class", "cell")
                         .attr("x", d => xScale(d.year))
-                        .attr("y", d => yScale(d.month - 1) - (yScale(d.month) - yScale(d.month - 1)))
-                        .attr("height", d => yScale(d.month + 1) - yScale(d.month))
+                        .attr("y", d => yScale(new Date(null, d.month - 1)) - (yScale(new Date(null, d.month)) - yScale(new Date(null, d.month - 1))))
+                        .attr("height", d => yScale(new Date(null,d.month)) - yScale(new Date(null, d.month - 1)))
                         .attr("width", (width - padding) / (maxYear - minYear))
                         .attr("data-month", d => d.month - 1)
                         .attr("data-year", d => d.year)
