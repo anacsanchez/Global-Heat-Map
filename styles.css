@@ -8,6 +8,9 @@ body {
   font-size: 1em;
   padding: 1em 0em 0em 0em;
 }
+#heat-map {
+  margin: 2em auto 0 auto;
+}
 
 .tick > text {
   /* text-anchor: start; */
