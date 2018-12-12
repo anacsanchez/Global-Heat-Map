@@ -61,6 +61,7 @@ function createHeatMap(data) {
 
   yAxis.tickFormat(d => d3.timeFormat("%B")(new Date(null, d, 1)))
   xAxis.tickFormat(d3.timeFormat("%Y"))
+  xAxis.ticks(20)
 
   heatMap.append("g")
           .attr("id","x-axis")
@@ -72,30 +73,33 @@ function createHeatMap(data) {
           .attr("transform", `translate(${padding}, 0)`)
           .call(yAxis)
 
-  const range = d3.range(minTemp, maxTemp, 1);
+  const range = d3.range(minTemp, maxTemp, 1.1);
 
   const legend = d3.select("#legend")
                    .append("svg")
                    .attr("width", width/3)
                    .attr("height", 100)
-  const legendWidth = width/3
+
+  const legendWidth = width/3;
+
   legend.selectAll("rect")
         .data(range)
         .enter()
         .append("rect")
         .attr("height", 25)
-        .attr("width", d => legendWidth/range.length)
+        .attr("width", d => (legendWidth/range.length) - 5)
         .attr("x", (d,i) => i * (legendWidth/range.length))
         .attr("y", 0)
         .attr("fill", d => fillScale(d))
 
-  const tempScale = d3.scaleLinear()
-  .domain([range[0], range[range.length - 1]])
+  const tempScale = d3.scaleBand()
+  .domain(range)
   .range([0, width/3])
   // .interpolate(d3.)
 
   const colorAxis = d3.axisBottom(tempScale)
-  // colorAxis.ticks(range.length)
+  colorAxis.ticks(range.length)
+  colorAxis.tickFormat(d3.format(".1f"))
   legend.append("g")
         .attr("id", "legend-axis")
         .attr("transform",`translate(0, 25)`)
