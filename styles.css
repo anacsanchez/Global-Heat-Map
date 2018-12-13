@@ -5,32 +5,45 @@ body {
 }
 #title {
   text-align: center;
-  font-size: 1em;
+  font-size: 2em;
   padding: 1em 0em 0em 0em;
 }
+
+.subtitle {
+  margin: .5em;
+  font-size: .7em;
+  /* font-weight: bold; */
+}
+.note {
+  font-size: .6em;
+}
 #heat-map {
-  margin: 2em auto 0 2em;
+  margin: 1.5em 1.5em 0 1em;
 }
 
 #legend {
-  margin-left: 2em;
+  margin: 0 1em 0 1em;
 }
 
 .tick > text {
-  /* text-anchor: start; */
+  font-size: 1.6em;
 }
-/* * {
-  margin: 0;
-  padding: 0;
-} */
 
 .cell {
   margin: 0;
   padding: 0;
   stroke: none;
 }
+.cell:hover {
+  cursor: default;
+}
 
-/* .tick {
-   text-align: center;
- } */
-
+#tooltip {
+  position: absolute;
+  background-color: black;
+  padding: .5em;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  line-height: 130%;
+}
