@@ -4,7 +4,7 @@ d3.json(
 ).then(data => createHeatMap(data));
 
 const padding = 100;
-const width = 1400 - padding;
+const width = 1400 - padding*2;
 const height = 550 - padding;
 const legendWidth = width / 3;
 
@@ -71,7 +71,6 @@ function createHeatMap(data) {
     .attr("width", legendWidth)
     .attr("height", 100);
 
-  d3.select("#heat-map").attr("align", "center")
   d3.select("#legend").attr("align", "center")
 
   map
@@ -93,7 +92,7 @@ function createHeatMap(data) {
         .attr("data-year", d.year)
         .style("opacity", 0.85)
         .style("top", () => `${yScale(d.month - 1) + padding - cellHeight/2}px`)
-        .style("left", () => `${d3.event.clientX - cellHeight}`)
+        .style("left", () => `${xScale(new Date(d.year.toString())) + cellHeight*2}px`)
         .html(`${d.year} - ${monthsArr[d.month-1]} <br/>${d3.format(".1f")(baseTemperature + d.variance)}&degC <br />${d.variance > 0 ? "+" : ""}${d3.format(".1f")(d.variance)}&degC
         `)
       d3.select(this)

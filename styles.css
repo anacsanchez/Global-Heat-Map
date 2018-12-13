@@ -19,6 +19,7 @@ body {
 }
 #heat-map {
   margin: 1.5em 1.5em 0 1em;
+  padding-right: 2em;
 }
 
 #legend {
